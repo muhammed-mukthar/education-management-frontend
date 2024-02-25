@@ -12,12 +12,14 @@ import {
   Button,
 } from "@mui/material";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 function MarkSheet() {
   const [users, setUsers] = useState([]);
   const theme = useTheme();
+  const navigate = useNavigate();
+
   let fetchData = async () => {
     let jwtToken = localStorage.getItem("accessToken");
 
@@ -42,30 +44,7 @@ function MarkSheet() {
   console.log(users);
 
   const handleAccept = async (userId) => {
-    let jwtToken = localStorage.getItem("accessToken");
-
-    try {
-      await axios.post(
-        `http://localhost:8080/api/v1/auth/accept/${userId}`,
-
-        {
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
-          },
-        }
-      );
-      fetchData();
-      toast.success("User Accepted Successfully");
-    } catch (err) {
-      console.log("Error:", err); // Log the entire error object for debugging
-      let errorMessage = "An error occurred";
-      if (err.response && err.response.data && err.response.data.message) {
-        errorMessage = err.response.data.message;
-      } else if (err.message) {
-        errorMessage = err.message;
-      }
-      toast.error(errorMessage);
-    }
+    navigate(`/mark/${userId}`);
   };
 
   return (
