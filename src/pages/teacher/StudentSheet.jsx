@@ -211,8 +211,8 @@ const StudentSheet = () => {
               "&:hover": {
                 backgroundColor: theme.palette.primary.dark,
               },
+              marginRight: "1rem",
             }}
-            style={{ marginRight: "53px", marginLeft: "53px" }}
           >
             <span style={{ color: theme.palette.primary.contrastText }}>
               Back
@@ -220,9 +220,7 @@ const StudentSheet = () => {
           </Button>
 
           <Typography variant="h3">
-            Please
-            <Link to={"/login"}>Log In</Link>
-            to Continue
+            Please <Link to={"/login"}>Log In</Link> to Continue
           </Typography>
         </Box>
       ) : (
@@ -234,53 +232,97 @@ const StudentSheet = () => {
           sx={{ boxShadow: 5 }}
           backgroundColor={theme.palette.background.alt}
         >
-          {" "}
           <Typography variant="h3">Mark Listing</Typography>
-          <Button
-            variant="contained"
-            component={Link}
-            to="/dashboard"
-            sx={{
-              backgroundColor: theme.palette.primary.main,
-              color: theme.palette.primary.contrastText,
-              "&:hover": {
-                backgroundColor: theme.palette.primary.dark,
-              },
-              marginRight: "16px", // Adjusted spacing
-            }}
-          >
-            {/* Ensure text is visible */}
-            <span style={{ color: theme.palette.primary.contrastText }}>
-              Back
-            </span>
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleOpenCreateModal}
-            sx={{
-              backgroundColor: theme.palette.primary.main,
-              color: theme.palette.primary.contrastText,
-              "&:hover": {
-                backgroundColor: theme.palette.primary.dark,
-              },
-              marginRight: "16px", // Adjusted spacing
-            }}
-          >
-            Create Mark
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleExportToExcel}
-            sx={{
-              backgroundColor: theme.palette.primary.main,
-              color: theme.palette.primary.contrastText,
-              "&:hover": {
-                backgroundColor: theme.palette.primary.dark,
-              },
-            }}
-          >
-            Export to Excel
-          </Button>
+          <Box mt={2} mb={2}>
+            <Button
+              variant="contained"
+              component={Link}
+              to="/dashboard"
+              sx={{
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.primary.contrastText,
+                "&:hover": {
+                  backgroundColor: theme.palette.primary.dark,
+                },
+                marginRight: "1rem",
+              }}
+            >
+              {/* Ensure text is visible */}
+              <span style={{ color: theme.palette.primary.contrastText }}>
+                Back
+              </span>
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handleOpenCreateModal}
+              sx={{
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.primary.contrastText,
+                "&:hover": {
+                  backgroundColor: theme.palette.primary.dark,
+                },
+                marginRight: "1rem",
+              }}
+            >
+              Create Mark
+            </Button>
+            {/* Add export to Excel button */}
+            <Button
+              variant="contained"
+              onClick={handleExportToExcel}
+              sx={{
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.primary.contrastText,
+                "&:hover": {
+                  backgroundColor: theme.palette.primary.dark,
+                },
+              }}
+            >
+              Export to Excel
+            </Button>
+          </Box>
+          <Collapse in={error !== ""}>
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          </Collapse>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Subject</TableCell>
+                  <TableCell>Marks</TableCell>
+                  <TableCell>Total</TableCell>
+                  <TableCell>Edit</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {questions.length &&
+                  questions.map((user) => (
+                    <TableRow key={user._id}>
+                      <TableCell>{user?.subject}</TableCell>
+                      <TableCell>{user?.mark}</TableCell>
+                      <TableCell>100</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() =>
+                            handleOpenEditModal(
+                              user.subject,
+                              user.mark,
+                              user._id
+                            )
+                          }
+                        >
+                          Edit
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
           <Modal
             open={openCreateModal}
             onClose={handleCloseCreateModal}
@@ -342,48 +384,6 @@ const StudentSheet = () => {
               </Box>
             </Fade>
           </Modal>
-          <Collapse in={error !== ""}>
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {error}
-            </Alert>
-          </Collapse>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Subject</TableCell>
-                  <TableCell>Marks</TableCell>
-                  <TableCell>Total</TableCell>
-                  <TableCell>Edit</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {questions.length &&
-                  questions.map((user) => (
-                    <TableRow key={user._id}>
-                      <TableCell>{user?.subject}</TableCell>
-                      <TableCell>{user?.mark}</TableCell>
-                      <TableCell>100</TableCell>
-                      <TableCell>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() =>
-                            handleOpenEditModal(
-                              user.subject,
-                              user.mark,
-                              user._id
-                            )
-                          }
-                        >
-                          Edit
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
           <Modal
             open={openEditModal}
             onClose={handleCloseEditModal}
