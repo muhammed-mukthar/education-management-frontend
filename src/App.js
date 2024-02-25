@@ -27,6 +27,7 @@ import { themeSettings } from "./theme";
 import UserList from "./pages/dashboard/UserList";
 import Cybequiz from "./pages/dashboard/Cyberquiz";
 import AddQuizOptions from "./pages/dashboard/AddQuizOption";
+import MarkSheet from "./pages/teacher/MarkSheet";
 
 function App() {
   const theme = useMemo(() => createTheme(themeSettings()), []);
@@ -50,6 +51,9 @@ function App() {
           <Route path="/users" element={<UserList />} />
           <Route path="/quiz" element={<Cybequiz />} />
           <Route path="/add-quiz" element={<AddQuizOptions />} />
+
+          {/* teacher */}
+          <Route path="/marks" element={<MarkSheet />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
