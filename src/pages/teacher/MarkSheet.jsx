@@ -22,13 +22,15 @@ function MarkSheet() {
     let jwtToken = localStorage.getItem("accessToken");
 
     const response = await axios.post(
-      "http://localhost:8080/api/v1/auth/list",
+      "http://localhost:8080/api/v1/auth/marks/users",
+      null, // Since you're sending a POST request, you likely don't need to send any data in the request body
       {
         headers: {
           Authorization: `Bearer ${jwtToken}`,
         },
       }
     );
+
     if (response.data.length) {
       console.log(response.data);
       setUsers(response.data);
@@ -99,7 +101,7 @@ function MarkSheet() {
               <TableCell>Email</TableCell>
               <TableCell>Role</TableCell>
               <TableCell>Class</TableCell>
-              <TableCell>Accepted</TableCell>
+              <TableCell>MarkSheet</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -112,17 +114,13 @@ function MarkSheet() {
                   <TableCell>{user.role}</TableCell>
                   <TableCell>{user.course}</TableCell>
                   <TableCell>
-                    {user.verify ? (
-                      "Accepted"
-                    ) : (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => handleAccept(user._id)}
-                      >
-                        Accept
-                      </Button>
-                    )}
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleAccept(user._id)}
+                    >
+                      View
+                    </Button>
                   </TableCell>{" "}
                 </TableRow>
               ))}
