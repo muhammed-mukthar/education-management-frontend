@@ -15,6 +15,7 @@ import PsychologyAltIcon from "@mui/icons-material/PsychologyAlt";
 import GradeIcon from "@mui/icons-material/Grade";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserData } from "../../store/userIdSlice";
+
 const Homepage = () => {
   const navigate = useNavigate();
   const userData = useSelector((state) => state.userId.userData);
@@ -124,7 +125,7 @@ const Homepage = () => {
                 },
               }}
             >
-              <PsychologyAltIcon
+              <GradeIcon
                 sx={{ fontSize: 80, color: "primary.main", mt: 2, ml: 2 }}
               />
               <Stack
