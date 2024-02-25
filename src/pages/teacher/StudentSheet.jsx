@@ -56,6 +56,40 @@ const StudentSheet = () => {
   const [editMarkId, setEditMarksId] = useState("");
 
   const [editFormError, setEditFormError] = useState("");
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [deleteMarkId, setDeleteMarkId] = useState("");
+
+  const handleOpenDeleteModal = (markId) => {
+    setDeleteMarkId(markId);
+    setOpenDeleteModal(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setOpenDeleteModal(false);
+  };
+
+  const handleDeleteMark = async () => {
+    try {
+      let jwtToken = localStorage.getItem("accessToken");
+
+      await axios.delete(
+        `http://localhost:8080/api/v1/auth/marks/delete/${deleteMarkId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+
+      // Update questions state by filtering out the deleted mark
+      setQuestions(questions.filter((q) => q._id !== deleteMarkId));
+      handleCloseDeleteModal();
+      toast.success("Mark deleted successfully!");
+    } catch (err) {
+      console.error(err);
+      setError("Failed to delete mark. Please try again.");
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,7 +98,7 @@ const StudentSheet = () => {
         let jwtToken = localStorage.getItem("accessToken");
 
         const { data } = await axios.get(
-          "http://localhost:8080/api/v1/auth/marks/all",
+          `http://localhost:8080/api/v1/auth/mark-list/${id}`,
           {
             headers: {
               Authorization: `Bearer ${jwtToken}`,
@@ -125,6 +159,7 @@ const StudentSheet = () => {
         {
           subject,
           mark: marks,
+          userId: id,
         },
         {
           headers: {
@@ -294,6 +329,7 @@ const StudentSheet = () => {
                   <TableCell>Marks</TableCell>
                   <TableCell>Total</TableCell>
                   <TableCell>Edit</TableCell>
+                  <TableCell>Delete</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -316,6 +352,15 @@ const StudentSheet = () => {
                           }
                         >
                           Edit
+                        </Button>
+                      </TableCell>{" "}
+                      <TableCell>
+                        <Button
+                          variant="contained"
+                          color="error"
+                          onClick={() => handleOpenDeleteModal(user._id)}
+                        >
+                          Delete
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -441,6 +486,52 @@ const StudentSheet = () => {
                     Update
                   </Button>
                 </form>
+              </Box>
+            </Fade>
+          </Modal>
+          <Modal
+            open={openDeleteModal}
+            onClose={handleCloseDeleteModal}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500,
+            }}
+          >
+            <Fade in={openDeleteModal}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  backgroundColor: "white",
+                  boxShadow: 24,
+                  padding: "2rem",
+                  borderRadius: "8px",
+                }}
+              >
+                <Typography variant="h5" sx={{ marginBottom: "1rem" }}>
+                  Delete Mark
+                </Typography>
+                <Typography variant="body1" sx={{ marginBottom: "1rem" }}>
+                  Are you sure you want to delete this mark?
+                </Typography>
+                <Button
+                  onClick={handleDeleteMark}
+                  variant="contained"
+                  color="primary"
+                  sx={{ marginRight: "1rem" }}
+                >
+                  Delete
+                </Button>
+                <Button
+                  onClick={handleCloseDeleteModal}
+                  variant="contained"
+                  color="secondary"
+                >
+                  Cancel
+                </Button>
               </Box>
             </Fade>
           </Modal>
