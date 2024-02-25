@@ -62,11 +62,29 @@ function CyberSecurityQuizComponent({ id }) {
     setCurrentQuestion(currentQuestion + 1);
   };
 
-  const finishQuiz = () => {
+  let SendResult = async (score) => {
+    try {
+      let jwtToken = localStorage.getItem("accessToken");
+
+      await axios.post(
+        "http://localhost:8080/api/v1/auth/result/create",
+        { marks: score, testId: id },
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const finishQuiz = async () => {
     // Calculate score
     const score = answers.filter(
       (answer, index) => answer === questions[index].answer
     ).length;
+    await SendResult(score);
     // Show result box
     setShowResult(true);
   };
@@ -101,11 +119,8 @@ function CyberSecurityQuizComponent({ id }) {
           </span>
         </div>
         <div className="buttons">
-          <button className="retake" onClick={() => window.location.reload()}>
-            Retake Quiz
-          </button>
           <button className="quit" onClick={goBack}>
-            Quit Quiz
+            Exit Quiz
           </button>
         </div>
       </div>

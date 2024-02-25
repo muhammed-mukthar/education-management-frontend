@@ -32,6 +32,7 @@ import StudentSheet from "./pages/teacher/StudentSheet";
 import StudentMarksheet from "./pages/student/StudentMarksheet";
 import TeacherTestListing from "./pages/teacher/TeacherTestListing";
 import StudentTestListing from "./pages/student/StudentTestListing";
+import StudentTestResults from "./pages/teacher/StudentTestResults";
 
 function App() {
   const theme = useMemo(() => createTheme(themeSettings()), []);
@@ -58,6 +59,8 @@ function App() {
           <Route path="/marks" element={<MarkSheet />} />
           <Route path="/mark/:id" element={<StudentSheet />} />
           <Route path="/teacher-tests" element={<TeacherTestListing />} />
+          <Route path="/result/:id" element={<StudentTestResults />} />
+
           {/* STUDENT */}
           <Route path="/mark-list" element={<StudentMarksheet />} />
 

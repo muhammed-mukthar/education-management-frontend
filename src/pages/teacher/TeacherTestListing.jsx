@@ -132,6 +132,9 @@ const TeacherTestListing = () => {
   const handleViewQuestion = (testId) => {
     navigate(`/add-quiz/${testId}`);
   };
+  const handleViewResult = (testId) => {
+    navigate(`/result/${testId}`);
+  };
 
   const handleCloseEditModal = () => {
     setOpenEditModal(false);
@@ -324,6 +327,7 @@ const TeacherTestListing = () => {
                   <TableCell>Course</TableCell>
                   <TableCell>Teacher</TableCell>
                   <TableCell>View</TableCell>
+                  <TableCell>Result</TableCell>
 
                   <TableCell>Delete</TableCell>
                 </TableRow>
@@ -342,6 +346,15 @@ const TeacherTestListing = () => {
                           onClick={() => handleViewQuestion(user._id)}
                         >
                           View
+                        </Button>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="contained"
+                          color="success"
+                          onClick={() => handleViewResult(user._id)}
+                        >
+                          View Result
                         </Button>
                       </TableCell>
                       <TableCell>
