@@ -28,6 +28,8 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import { saveAs } from "file-saver"; // Import saveAs function from file-saver library
+import * as XLSX from "xlsx"; // Import XLSX library for Excel export
 
 const StudentSheet = () => {
   const { id } = useParams();
@@ -173,6 +175,21 @@ const StudentSheet = () => {
     }
   };
 
+  // Function to export table data to Excel
+  const handleExportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(questions);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Marks");
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    const data = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+    });
+    saveAs(data, "marks.xlsx");
+  };
+
   return (
     <>
       {!loggedIn ? (
@@ -229,6 +246,7 @@ const StudentSheet = () => {
               "&:hover": {
                 backgroundColor: theme.palette.primary.dark,
               },
+              marginRight: "16px", // Adjusted spacing
             }}
           >
             {/* Ensure text is visible */}
@@ -245,9 +263,23 @@ const StudentSheet = () => {
               "&:hover": {
                 backgroundColor: theme.palette.primary.dark,
               },
+              marginRight: "16px", // Adjusted spacing
             }}
           >
             Create Mark
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleExportToExcel}
+            sx={{
+              backgroundColor: theme.palette.primary.main,
+              color: theme.palette.primary.contrastText,
+              "&:hover": {
+                backgroundColor: theme.palette.primary.dark,
+              },
+            }}
+          >
+            Export to Excel
           </Button>
           <Modal
             open={openCreateModal}
