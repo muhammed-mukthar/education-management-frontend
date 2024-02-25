@@ -47,7 +47,7 @@ const Register = () => {
         email,
         password,
         role,
-        class: selectedClass,
+        course: selectedClass,
         parentsEmail: role === "student" ? parentsEmail : undefined, // Only send parentsEmail if role is "student"
       });
       setLoading(false);

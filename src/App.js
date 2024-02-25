@@ -30,7 +30,6 @@ import AddQuizOptions from "./pages/dashboard/AddQuizOption";
 
 function App() {
   const theme = useMemo(() => createTheme(themeSettings()), []);
-  const loggedIn = JSON.parse(localStorage.getItem("authToken"));
 
   return (
     <ThemeProvider theme={theme}>
@@ -38,11 +37,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<HomeComponent />} path="/"></Route>
-          <Route element={<FactsComponent />} path="/facts"></Route>
-          <Route element={<HomeComponent />} path="/home"></Route>
-          <Route element={<LearnMoreComponent />} path="/learn-more"></Route>
-          <Route element={<SolutionsComponent />} path="/solutions"></Route>
-          <Route element={<ThreatsComponent />} path="/threats"></Route>
+
           <Route
             element={<RecommendationsComponent />}
             path="/recommendations"
@@ -51,13 +46,6 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Homepage />} />
-
-          <Route path="/summary" element={<Summary />} />
-          <Route path="/paragraph" element={<Paragraph />} />
-          <Route path="/chatbot" element={<ChatBot />} />
-          <Route path="/bash-converter" element={<JsConverter />} />
-          <Route path="/image-generation" element={<ImageGeneration />} />
-          <Route path="/email-generation" element={<Email />} />
           <Route path="/history" element={<History />} />
           <Route path="/users" element={<UserList />} />
           <Route path="/quiz" element={<Cybequiz />} />

@@ -13,31 +13,59 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function UserList() {
   const [users, setUsers] = useState([]);
   const theme = useTheme();
+  let fetchData = async () => {
+    let jwtToken = localStorage.getItem("accessToken");
 
+    const response = await axios.post(
+      "http://localhost:8080/api/v1/auth/list",
+      {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      }
+    );
+    if (response.data.length) {
+      console.log(response.data);
+      setUsers(response.data);
+    }
+  };
   useEffect(() => {
-    let fetchData = async () => {
-      let jwtToken = localStorage.getItem("accessToken");
+    fetchData();
+  }, []);
+  console.log(users);
 
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/auth/list",
+  const handleAccept = async (userId) => {
+    let jwtToken = localStorage.getItem("accessToken");
+
+    try {
+      await axios.post(
+        `http://localhost:8080/api/v1/auth/accept/${userId}`,
+
         {
           headers: {
             Authorization: `Bearer ${jwtToken}`,
           },
         }
       );
-      if (response.data.length) {
-        console.log(response.data);
-        setUsers(response.data);
+      fetchData();
+      toast.success("User Accepted Successfully");
+    } catch (err) {
+      console.log("Error:", err); // Log the entire error object for debugging
+      let errorMessage = "An error occurred";
+      if (err.response && err.response.data && err.response.data.message) {
+        errorMessage = err.response.data.message;
+      } else if (err.message) {
+        errorMessage = err.message;
       }
-    };
-    fetchData();
-  }, []);
-  console.log(users);
+      toast.error(errorMessage);
+    }
+  };
+
   return (
     <Box
       width={"40%"}
@@ -69,6 +97,9 @@ function UserList() {
             <TableRow>
               <TableCell>Name</TableCell>
               <TableCell>Email</TableCell>
+              <TableCell>Role</TableCell>
+              <TableCell>Class</TableCell>
+              <TableCell>Accepted</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -78,6 +109,21 @@ function UserList() {
                   {console.log(user, "this is user")}
                   <TableCell>{user.username}</TableCell>
                   <TableCell>{user.email}</TableCell>
+                  <TableCell>{user.role}</TableCell>
+                  <TableCell>{user.course}</TableCell>
+                  <TableCell>
+                    {user.verify ? (
+                      "Accepted"
+                    ) : (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handleAccept(user._id)}
+                      >
+                        Accept
+                      </Button>
+                    )}
+                  </TableCell>{" "}
                 </TableRow>
               ))}
           </TableBody>
