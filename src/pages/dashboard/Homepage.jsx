@@ -58,7 +58,7 @@ const Homepage = () => {
               Test
             </Typography>
             <Card
-              onClick={() => navigate("/quiz")}
+              onClick={() => navigate("/student-tests")}
               sx={{
                 boxShadow: 2,
                 display: "flex",

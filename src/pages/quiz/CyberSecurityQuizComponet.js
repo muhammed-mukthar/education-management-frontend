@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function CyberSecurityQuizComponent() {
+function CyberSecurityQuizComponent({ id }) {
   const [quizStarted, setQuizStarted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -29,7 +29,7 @@ function CyberSecurityQuizComponent() {
         let jwtToken = localStorage.getItem("accessToken");
 
         const { data } = await axios.post(
-          "http://localhost:8080/api/v1/auth/list-quiz",
+          `http://localhost:8080/api/v1/auth/list-quiz/${id}`,
           {},
           {
             headers: {
@@ -49,7 +49,7 @@ function CyberSecurityQuizComponent() {
     };
 
     fetchData();
-  }, []);
+  }, [id]);
 
   const handleAnswer = (selectedOption) => {
     const updatedAnswers = [...answers];

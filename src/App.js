@@ -31,6 +31,7 @@ import MarkSheet from "./pages/teacher/MarkSheet";
 import StudentSheet from "./pages/teacher/StudentSheet";
 import StudentMarksheet from "./pages/student/StudentMarksheet";
 import TeacherTestListing from "./pages/teacher/TeacherTestListing";
+import StudentTestListing from "./pages/student/StudentTestListing";
 
 function App() {
   const theme = useMemo(() => createTheme(themeSettings()), []);
@@ -51,15 +52,16 @@ function App() {
           <Route path="/dashboard" element={<Homepage />} />
           <Route path="/history" element={<History />} />
           <Route path="/users" element={<UserList />} />
-          <Route path="/quiz" element={<Cybequiz />} />
+          <Route path="/quiz/:id" element={<Cybequiz />} />
           <Route path="/add-quiz/:id" element={<AddQuizOptions />} />
           {/* teacher */}
           <Route path="/marks" element={<MarkSheet />} />
           <Route path="/mark/:id" element={<StudentSheet />} />
           <Route path="/teacher-tests" element={<TeacherTestListing />} />
-
           {/* STUDENT */}
           <Route path="/mark-list" element={<StudentMarksheet />} />
+
+          <Route path="/student-tests" element={<StudentTestListing />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

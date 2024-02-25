@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 import "./dashboard.css"; // Import CSS file
@@ -20,6 +20,8 @@ import CyberSecurityQuizComponent from "../quiz/CyberSecurityQuizComponet";
 const Cybequiz = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { id } = useParams();
+
   //media
   const isNotMobile = useMediaQuery("(min-width: 1000px)");
   // states
@@ -92,7 +94,7 @@ const Cybequiz = () => {
             </Alert>
           </Collapse>
 
-          <CyberSecurityQuizComponent />
+          <CyberSecurityQuizComponent id={id} />
           {response ? (
             <Card
               sx={{
