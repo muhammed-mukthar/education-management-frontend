@@ -10,6 +10,7 @@ import {
   Box,
   useTheme,
   Button,
+  Typography,
 } from "@mui/material";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -56,6 +57,8 @@ function MarkSheet() {
       sx={{ boxShadow: 5 }}
       backgroundColor={theme.palette.background.alt}
     >
+      {" "}
+      <Typography variant="h3">Student Listing</Typography>
       <Button
         variant="contained"
         component={Link}
@@ -71,7 +74,6 @@ function MarkSheet() {
         {/* Ensure text is visible */}
         <span style={{ color: theme.palette.primary.contrastText }}>Back</span>
       </Button>
-
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

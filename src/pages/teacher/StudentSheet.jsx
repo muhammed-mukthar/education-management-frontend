@@ -41,11 +41,19 @@ const StudentSheet = () => {
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState(false);
 
-  // Modal state
-  const [openModal, setOpenModal] = useState(false);
+  // Create mark modal state
+  const [openCreateModal, setOpenCreateModal] = useState(false);
   const [subject, setSubject] = useState("");
   const [marks, setMarks] = useState("");
-  const [formError, setFormError] = useState("");
+  const [createFormError, setCreateFormError] = useState("");
+
+  // Edit mark modal state
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [editSubject, setEditSubject] = useState("");
+  const [editMarks, setEditMarks] = useState("");
+  const [editMarkId, setEditMarksId] = useState("");
+
+  const [editFormError, setEditFormError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,22 +82,37 @@ const StudentSheet = () => {
     fetchData();
   }, [response, id]);
 
-  const handleOpenModal = () => {
-    setOpenModal(true);
+  const handleOpenCreateModal = () => {
+    setOpenCreateModal(true);
   };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
+  const handleCloseCreateModal = () => {
+    setOpenCreateModal(false);
     setSubject("");
     setMarks("");
-    setFormError("");
+    setCreateFormError("");
   };
 
-  const handleSubmit = async (event) => {
+  const handleOpenEditModal = (subject, marks, markId) => {
+    setEditSubject(subject);
+    setEditMarks(marks);
+    setEditMarksId(markId);
+    setOpenEditModal(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setOpenEditModal(false);
+    setEditSubject("");
+    setEditMarksId("");
+    setEditMarks("");
+    setEditFormError("");
+  };
+
+  const handleSubmitCreate = async (event) => {
     event.preventDefault();
     try {
       if (!subject || !marks) {
-        setFormError("Subject and Marks are required.");
+        setCreateFormError("Subject and Marks are required.");
         return;
       }
 
@@ -110,15 +133,43 @@ const StudentSheet = () => {
 
       // Update questions state with new data
       setQuestions([...questions, data]);
-      handleCloseModal();
+      handleCloseCreateModal();
       toast.success("Mark created successfully!");
     } catch (err) {
       console.error(err);
-      handleCloseModal();
       setError("Failed to create mark. Please try again.");
-      setTimeout(() => {
-        setError("");
-      }, 5000);
+    }
+  };
+
+  const handleSubmitEdit = async (event) => {
+    event.preventDefault();
+    try {
+      let jwtToken = localStorage.getItem("accessToken");
+
+      const { data } = await axios.put(
+        `http://localhost:8080/api/v1/auth/marks/edit`,
+        {
+          mark: editMarks,
+          markId: editMarkId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+
+      // Update questions state with new data
+      setQuestions(
+        questions.map((q) =>
+          q.subject === editSubject ? { ...q, mark: editMarks } : q
+        )
+      );
+      handleCloseEditModal();
+      toast.success("Mark updated successfully!");
+    } catch (err) {
+      console.error(err);
+      setError("Failed to update mark. Please try again.");
     }
   };
 
@@ -144,11 +195,13 @@ const StudentSheet = () => {
                 backgroundColor: theme.palette.primary.dark,
               },
             }}
+            style={{ marginRight: "53px", marginLeft: "53px" }}
           >
             <span style={{ color: theme.palette.primary.contrastText }}>
               Back
             </span>
           </Button>
+
           <Typography variant="h3">
             Please
             <Link to={"/login"}>Log In</Link>
@@ -164,9 +217,28 @@ const StudentSheet = () => {
           sx={{ boxShadow: 5 }}
           backgroundColor={theme.palette.background.alt}
         >
+          {" "}
+          <Typography variant="h3">Mark Listing</Typography>
           <Button
             variant="contained"
-            onClick={handleOpenModal}
+            component={Link}
+            to="/dashboard"
+            sx={{
+              backgroundColor: theme.palette.primary.main,
+              color: theme.palette.primary.contrastText,
+              "&:hover": {
+                backgroundColor: theme.palette.primary.dark,
+              },
+            }}
+          >
+            {/* Ensure text is visible */}
+            <span style={{ color: theme.palette.primary.contrastText }}>
+              Back
+            </span>
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleOpenCreateModal}
             sx={{
               backgroundColor: theme.palette.primary.main,
               color: theme.palette.primary.contrastText,
@@ -178,15 +250,15 @@ const StudentSheet = () => {
             Create Mark
           </Button>
           <Modal
-            open={openModal}
-            onClose={handleCloseModal}
+            open={openCreateModal}
+            onClose={handleCloseCreateModal}
             closeAfterTransition
             BackdropComponent={Backdrop}
             BackdropProps={{
               timeout: 500,
             }}
           >
-            <Fade in={openModal}>
+            <Fade in={openCreateModal}>
               <Box
                 sx={{
                   position: "absolute",
@@ -202,7 +274,7 @@ const StudentSheet = () => {
                 <Typography variant="h5" sx={{ marginBottom: "1rem" }}>
                   Create Mark
                 </Typography>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmitCreate}>
                   <TextField
                     fullWidth
                     label="Subject"
@@ -221,9 +293,9 @@ const StudentSheet = () => {
                     onChange={(e) => setMarks(e.target.value)}
                     required
                   />
-                  {formError && (
+                  {createFormError && (
                     <Alert severity="error" sx={{ marginTop: "1rem" }}>
-                      {formError}
+                      {createFormError}
                     </Alert>
                   )}
                   <Button
@@ -243,7 +315,6 @@ const StudentSheet = () => {
               {error}
             </Alert>
           </Collapse>
-          <Typography variant="h3">Mark Listing</Typography>
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
@@ -265,7 +336,13 @@ const StudentSheet = () => {
                         <Button
                           variant="contained"
                           color="primary"
-                          // onClick={() => handleAccept(user._id)}
+                          onClick={() =>
+                            handleOpenEditModal(
+                              user.subject,
+                              user.mark,
+                              user._id
+                            )
+                          }
                         >
                           Edit
                         </Button>
@@ -275,6 +352,66 @@ const StudentSheet = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          <Modal
+            open={openEditModal}
+            onClose={handleCloseEditModal}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500,
+            }}
+          >
+            <Fade in={openEditModal}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  backgroundColor: "white",
+                  boxShadow: 24,
+                  padding: "2rem",
+                  borderRadius: "8px",
+                }}
+              >
+                <Typography variant="h5" sx={{ marginBottom: "1rem" }}>
+                  Edit Mark
+                </Typography>
+                <form onSubmit={handleSubmitEdit}>
+                  <TextField
+                    fullWidth
+                    label="Subject"
+                    variant="outlined"
+                    margin="normal"
+                    value={editSubject}
+                    disabled
+                  />
+                  <TextField
+                    fullWidth
+                    label="Marks"
+                    variant="outlined"
+                    margin="normal"
+                    value={editMarks}
+                    onChange={(e) => setEditMarks(e.target.value)}
+                    required
+                  />
+                  {editFormError && (
+                    <Alert severity="error" sx={{ marginTop: "1rem" }}>
+                      {editFormError}
+                    </Alert>
+                  )}
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    sx={{ marginTop: "1rem" }}
+                  >
+                    Update
+                  </Button>
+                </form>
+              </Box>
+            </Fade>
+          </Modal>
         </Box>
       )}
     </>
