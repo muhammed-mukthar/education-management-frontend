@@ -1,0 +1,196 @@
+nav {
+  margin: 0;
+  display: flex;
+  height: auto;
+  background: #421e68;
+  box-shadow: 0px 1px 0px rgba(17, 17, 26, 0.15),
+    0px 0px 8px rgba(17, 17, 26, 0.75);
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0.2rem;
+}
+.bodys {
+  padding: 0;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  margin: 0;
+  color: white;
+  background: #492173;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  line-height: 1.3;
+}
+html {
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  /* justify-content:space-around; */
+  /* align-items: center; */
+  margin: 0;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  background: #6d4d8f;
+  flex-wrap: nowrap;
+  margin: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
+    rgba(0, 0, 0, 0.22) 0px 10px 10px;
+}
+
+.c1 {
+  width: 80vw;
+
+  font-size: 1.3rem;
+  padding: 1rem;
+}
+
+.title {
+  font-size: 1rem;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+
+  margin-left: 1rem;
+}
+
+.subtitle {
+  font-size: 1.6rem;
+  color: #ffe2fe;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+nav a {
+  text-decoration: none;
+  font-size: 1.2rem;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+nav a:hover {
+  text-decoration: underline;
+
+  color: #ffe2fe;
+}
+
+.card3 {
+  width: 50px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.card2 {
+  width: 50px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+footer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: space-between;
+  justify-content: center;
+}
+
+.heading {
+  background: #5b3781;
+  color: #ffffff;
+  margin-bottom: 30px;
+  padding: 10px 0 10px 0;
+
+  text-align: center;
+  padding-top: 0;
+}
+.heading > h1 {
+  font-weight: 400;
+  font-size: 30px;
+  letter-spacing: 10px;
+  margin-bottom: 10px;
+}
+.heading > h3 {
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: 5px;
+}
+
+.flip-card {
+  background-color: transparent;
+  height: 350px;
+  perspective: 1000px;
+  width: 27%;
+  padding: 20px;
+  margin: 0;
+}
+
+@media screen and (max-width: 700px) {
+  .flip-card {
+    width: 80%;
+    margin-bottom: 20px;
+  }
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  border-radius: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
+    rgba(0, 0, 0, 0.22) 0px 10px 10px;
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+  border-radius: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
+    rgba(0, 0, 0, 0.22) 0px 10px 10px;
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
+    rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  padding: 1rem;
+  box-sizing: border-box;
+  vertical-align: bottom;
+}
+
+.flip-card-front {
+  background-color: #6d4d8f;
+  color: white;
+  text-align: center;
+  font-size: 30px;
+}
+
+.flip-card-back {
+  background-color: #a180c4;
+  color: white;
+  transform: rotateY(180deg);
+  text-align: justify;
+  font-size: 17px;
+}
+
+.ccon {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
