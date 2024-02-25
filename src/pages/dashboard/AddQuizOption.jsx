@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 import {
@@ -28,6 +28,8 @@ import {
 const AddQuizOptions = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { id } = useParams();
+
   //media
   const isNotMobile = useMediaQuery("(min-width: 1000px)");
   // states
@@ -41,7 +43,8 @@ const AddQuizOptions = () => {
   const [quizOptions, setQuizOptions] = useState({
     question: "",
     answer: "",
-    options: ["", "", "", ""], // Updated to include 4 empty strings
+    options: ["", "", "", ""],
+    testId: "", // Updated to include 4 empty strings
   });
 
   const loggedIn = JSON.parse(localStorage.getItem("authToken"));
@@ -59,7 +62,7 @@ const AddQuizOptions = () => {
         let jwtToken = localStorage.getItem("accessToken");
 
         const { data } = await axios.post(
-          "http://localhost:8080/api/v1/auth/list-quiz",
+          `http://localhost:8080/api/v1/auth/list-quiz/${id}`,
           {
             headers: {
               Authorization: `Bearer ${jwtToken}`,
@@ -103,6 +106,7 @@ const AddQuizOptions = () => {
     }
 
     try {
+      quizOptions.testId = id;
       setLoading(true);
       let jwtToken = localStorage.getItem("accessToken");
       console.log(jwtToken, "jwt token");

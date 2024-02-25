@@ -216,10 +216,10 @@ const Homepage = () => {
             }}
           >
             <Typography variant="h4" mb={2} fontWeight="bold">
-              Test{" "}
+              Test
             </Typography>
             <Card
-              onClick={() => navigate("/add-quiz")}
+              onClick={() => navigate("/teacher-tests")}
               sx={{
                 boxShadow: 2,
                 display: "flex",
@@ -256,6 +256,7 @@ const Homepage = () => {
               </Stack>
             </Card>
           </Box>
+
           <Box
             p={3}
             sx={{

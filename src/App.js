@@ -30,6 +30,7 @@ import AddQuizOptions from "./pages/dashboard/AddQuizOption";
 import MarkSheet from "./pages/teacher/MarkSheet";
 import StudentSheet from "./pages/teacher/StudentSheet";
 import StudentMarksheet from "./pages/student/StudentMarksheet";
+import TeacherTestListing from "./pages/teacher/TeacherTestListing";
 
 function App() {
   const theme = useMemo(() => createTheme(themeSettings()), []);
@@ -40,7 +41,6 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<HomeComponent />} path="/"></Route>
-
           <Route
             element={<RecommendationsComponent />}
             path="/recommendations"
@@ -52,11 +52,11 @@ function App() {
           <Route path="/history" element={<History />} />
           <Route path="/users" element={<UserList />} />
           <Route path="/quiz" element={<Cybequiz />} />
-          <Route path="/add-quiz" element={<AddQuizOptions />} />
-
+          <Route path="/add-quiz/:id" element={<AddQuizOptions />} />
           {/* teacher */}
           <Route path="/marks" element={<MarkSheet />} />
           <Route path="/mark/:id" element={<StudentSheet />} />
+          <Route path="/teacher-tests" element={<TeacherTestListing />} />
 
           {/* STUDENT */}
           <Route path="/mark-list" element={<StudentMarksheet />} />
