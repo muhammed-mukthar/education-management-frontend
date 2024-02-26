@@ -224,6 +224,26 @@ const StudentSheet = () => {
     });
     saveAs(data, "marks.xlsx");
   };
+  const handleSendNotification = async () => {
+    try {
+      let jwtToken = localStorage.getItem("accessToken");
+
+      const { data } = await axios.post(
+        `http://localhost:8080/api/v1/auth//send-email`,
+        { userId: id },
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+
+      toast.success("Notification send successfully!");
+    } catch (err) {
+      console.error(err);
+      setError("Failed to send Notification. Please try again.");
+    }
+  };
 
   return (
     <>
@@ -311,9 +331,24 @@ const StudentSheet = () => {
                 "&:hover": {
                   backgroundColor: theme.palette.primary.dark,
                 },
+                marginRight: "1rem",
               }}
             >
               Export to Excel
+            </Button>
+
+            <Button
+              variant="contained"
+              onClick={handleSendNotification}
+              sx={{
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.primary.contrastText,
+                "&:hover": {
+                  backgroundColor: theme.palette.primary.dark,
+                },
+              }}
+            >
+              Send Notification To Parent
             </Button>
           </Box>
           <Collapse in={error !== ""}>

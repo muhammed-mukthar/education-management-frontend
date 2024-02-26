@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Result from "./pages/Result";
 import Main from "./pages/Main";
 import Quiz from "./pages/Quiz";
@@ -33,9 +33,11 @@ import StudentMarksheet from "./pages/student/StudentMarksheet";
 import TeacherTestListing from "./pages/teacher/TeacherTestListing";
 import StudentTestListing from "./pages/student/StudentTestListing";
 import StudentTestResults from "./pages/teacher/StudentTestResults";
+import { useSelector } from "react-redux";
 
 function App() {
   const theme = useMemo(() => createTheme(themeSettings()), []);
+  const userData = useSelector((state) => state.userId.userData);
 
   return (
     <ThemeProvider theme={theme}>
@@ -48,8 +50,18 @@ function App() {
             path="/recommendations"
           ></Route>
           <Route element={<CyberSecurityQuizComponent />} path="/cyber"></Route>
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
+          {/* <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} /> */}
+          <Route
+            path="/register"
+            element={userData ? <Navigate to="/dashboard" /> : <Register />}
+          />
+          <Route
+            path="/login"
+            element={userData ? <Navigate to="/dashboard" /> : <Login />}
+          />
+          {/* Other routes... */}
+
           <Route path="/dashboard" element={<Homepage />} />
           <Route path="/history" element={<History />} />
           <Route path="/users" element={<UserList />} />
