@@ -116,7 +116,13 @@ const StudentTestResults = () => {
           sx={{ boxShadow: 5 }}
           backgroundColor={theme.palette.background.alt}
         >
-          <Typography variant="h3">Results</Typography>
+          <Typography
+            variant="h3"
+            align="center"
+            sx={{ fontSize: "2.5rem", marginBottom: "1rem" }}
+          >
+            Test Result{" "}
+          </Typography>
           <Box mt={2} mb={2}>
             <Button
               variant="contained"

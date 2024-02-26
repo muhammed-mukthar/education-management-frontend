@@ -10,6 +10,7 @@ import {
   Box,
   useTheme,
   Button,
+  Typography,
 } from "@mui/material";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -75,6 +76,13 @@ function UserList() {
       sx={{ boxShadow: 5 }}
       backgroundColor={theme.palette.background.alt}
     >
+      <Typography
+        variant="h3"
+        align="center"
+        sx={{ fontSize: "2.5rem", marginBottom: "1rem" }}
+      >
+        User Listing{" "}
+      </Typography>
       <Button
         variant="contained"
         component={Link}
@@ -85,12 +93,13 @@ function UserList() {
           "&:hover": {
             backgroundColor: theme.palette.primary.dark,
           },
+          marginRight: "1rem",
+          marginBottom: "1rem",
         }}
       >
         {/* Ensure text is visible */}
         <span style={{ color: theme.palette.primary.contrastText }}>Back</span>
       </Button>
-
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

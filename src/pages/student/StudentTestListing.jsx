@@ -116,7 +116,13 @@ const StudentTestListing = () => {
           sx={{ boxShadow: 5 }}
           backgroundColor={theme.palette.background.alt}
         >
-          <Typography variant="h3">Test Listing</Typography>
+          <Typography
+            variant="h3"
+            align="center"
+            sx={{ fontSize: "2.5rem", marginBottom: "1rem" }}
+          >
+            Test Listing{" "}
+          </Typography>
           <Box mt={2} mb={2}>
             <Button
               variant="contained"

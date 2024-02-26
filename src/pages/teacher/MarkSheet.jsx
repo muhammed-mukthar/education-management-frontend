@@ -58,7 +58,13 @@ function MarkSheet() {
       backgroundColor={theme.palette.background.alt}
     >
       {" "}
-      <Typography variant="h3">Student Listing</Typography>
+      <Typography
+        variant="h3"
+        align="center"
+        sx={{ fontSize: "2.5rem", marginBottom: "1rem" }}
+      >
+        Student Listing{" "}
+      </Typography>
       <Button
         variant="contained"
         component={Link}
@@ -69,6 +75,8 @@ function MarkSheet() {
           "&:hover": {
             backgroundColor: theme.palette.primary.dark,
           },
+          marginRight: "1rem",
+          marginBottom: "1rem",
         }}
       >
         {/* Ensure text is visible */}
@@ -86,10 +94,9 @@ function MarkSheet() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.length &&
-              users?.map((user) => (
+            {users.length ? (
+              users.map((user) => (
                 <TableRow key={user._id}>
-                  {console.log(user, "this is user")}
                   <TableCell>{user.username}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user.role}</TableCell>
@@ -102,9 +109,16 @@ function MarkSheet() {
                     >
                       View
                     </Button>
-                  </TableCell>{" "}
+                  </TableCell>
                 </TableRow>
-              ))}
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5} align="center">
+                  No users found.
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
