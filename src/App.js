@@ -36,6 +36,7 @@ import StudentTestResults from "./pages/teacher/StudentTestResults";
 import { useSelector } from "react-redux";
 import FileUpload from "./pages/teacher/FileUpload";
 import { Toaster } from "react-hot-toast";
+import FileListing from "./pages/student/FileListing";
 
 function App() {
   const theme = useMemo(() => createTheme(themeSettings()), []);
@@ -90,6 +91,7 @@ function App() {
 
           {/* STUDENT */}
           <Route path="/mark-list" element={<StudentMarksheet />} />
+          <Route path="/file-listing" element={<FileListing />} />
 
           <Route path="/student-tests" element={<StudentTestListing />} />
         </Routes>

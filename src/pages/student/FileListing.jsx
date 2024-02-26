@@ -21,10 +21,9 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import DeleteIcon from "@mui/icons-material/Delete";
-import DeleteModal from "./DeleteModal";
 import { Link } from "react-router-dom";
 
-function FileUpload() {
+function FileListing() {
   const [files, setFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [deleteFileId, setDeleteFileId] = useState(null);
@@ -33,16 +32,12 @@ function FileUpload() {
   const isNotMobile = useMediaQuery("(min-width: 1000px)");
   const theme = useTheme();
 
-  useEffect(() => {
-    fetchFiles();
-  }, []);
-
   const fetchFiles = async () => {
     try {
       let jwtToken = localStorage.getItem("accessToken");
 
       const response = await axios.get(
-        "http://localhost:8080/api/v1/auth/files",
+        "http://localhost:8080/api/v1/auth/student/files",
         {
           headers: {
             "Content-Type": "application/json",
@@ -55,12 +50,15 @@ function FileUpload() {
       console.error("Error fetching files:", error);
     }
   };
+  useEffect(() => {
+    fetchFiles();
+  }, []);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
 
-  const handleFileUpload = async () => {
+  const handleFileListing = async () => {
     try {
       const formData = new FormData();
       formData.append("file", selectedFile);
@@ -185,11 +183,6 @@ function FileUpload() {
       sx={{ boxShadow: 5 }}
       bgcolor={theme.palette.background.alt}
     >
-      <DeleteModal
-        open={isDeleteModalOpen}
-        handleClose={closeDeleteModal}
-        handleDelete={() => handleFileDelete(deleteFileId)}
-      />
       <Button
         variant="contained"
         component={Link}
@@ -213,45 +206,6 @@ function FileUpload() {
         Study Materials
       </Typography>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Typography variant="h4" gutterBottom align="center">
-            Uploaded Files
-          </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Box display="flex" justifyContent="center">
-            <input
-              // accept="image/*, video/*"
-              style={{ display: "none" }}
-              id="file-upload"
-              type="file"
-              onChange={handleFileChange}
-            />
-            <label htmlFor="file-upload">
-              <Button
-                variant="contained"
-                component="span"
-                startIcon={<CloudUploadIcon />}
-              >
-                Upload
-              </Button>
-            </label>
-          </Box>
-          {selectedFile && (
-            <Box display="flex" justifyContent="center" mt={1}>
-              {renderFilePreview()}
-            </Box>
-          )}
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleFileUpload}
-            disabled={!selectedFile}
-            fullWidth
-          >
-            Submit
-          </Button>
-        </Grid>
         <Grid item xs={12}>
           <List>
             {files.map((file) => (
@@ -284,12 +238,6 @@ function FileUpload() {
                     >
                       <CloudDownloadIcon />
                     </IconButton>
-                    <IconButton
-                      onClick={() => openDeleteModal(file._id)}
-                      color="error"
-                    >
-                      <DeleteIcon />
-                    </IconButton>
                   </Box>
                 </ListItem>
               </Paper>
@@ -301,4 +249,4 @@ function FileUpload() {
   );
 }
 
-export default FileUpload;
+export default FileListing;
