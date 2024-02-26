@@ -92,7 +92,7 @@ function CyberSecurityQuizComponent({ id }) {
   if (!quizStarted) {
     return (
       <div className="start_btn">
-        <button onClick={startQuiz}>Start Quiz</button>
+        <button onClick={startQuiz}>Start Test</button>
       </div>
     );
   }
@@ -105,7 +105,7 @@ function CyberSecurityQuizComponent({ id }) {
           {/* <i className="material-icons">security</i> */}
         </div>
         <div className="finished_txt">
-          Well done! You've completed the quiz!
+          Well done! You've completed the Test!
         </div>
         <div className="final_score">
           <span>
@@ -120,7 +120,7 @@ function CyberSecurityQuizComponent({ id }) {
         </div>
         <div className="buttons">
           <button className="quit" onClick={goBack}>
-            Exit Quiz
+            Exit Test
           </button>
         </div>
       </div>
@@ -174,7 +174,7 @@ function CyberSecurityQuizComponent({ id }) {
             <Button onClick={nextQuestion}>Next Question</Button>
           ) : (
             <Button className="next_btn" onClick={finishQuiz}>
-              Finish Quiz
+              Finish Test
             </Button>
           )}
         </footer>

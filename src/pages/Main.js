@@ -42,7 +42,7 @@ export default function Main() {
           to={userId ? "quiz" : "/"}
           onClick={storeUserId}
         >
-          Start Quiz
+          Start Test
         </Link>
       </Container>
     </Container>

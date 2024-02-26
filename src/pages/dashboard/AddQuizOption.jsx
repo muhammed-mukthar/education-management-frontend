@@ -231,8 +231,13 @@ const AddQuizOptions = () => {
             </Alert>
           </Collapse>
           <form onSubmit={handleSubmit}>
-            <Typography variant="h3">Create Quiz Options</Typography>
-
+            <Typography
+              variant="h3"
+              align="center"
+              sx={{ fontSize: "2.5rem", marginBottom: "1rem" }}
+            >
+              Create Quiz Options{" "}
+            </Typography>
             {/* Quiz Options Input Fields */}
 
             <TextField

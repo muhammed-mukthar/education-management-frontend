@@ -34,6 +34,7 @@ import TeacherTestListing from "./pages/teacher/TeacherTestListing";
 import StudentTestListing from "./pages/student/StudentTestListing";
 import StudentTestResults from "./pages/teacher/StudentTestResults";
 import { useSelector } from "react-redux";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const theme = useMemo(() => createTheme(themeSettings()), []);
@@ -43,6 +44,18 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
+        <Toaster
+          position="top-center"
+          gutter={22}
+          toastOptions={{
+            success: {
+              duration: 3000,
+            },
+            error: {
+              duration: 5000,
+            },
+          }}
+        />
         <Routes>
           <Route element={<HomeComponent />} path="/"></Route>
           <Route
