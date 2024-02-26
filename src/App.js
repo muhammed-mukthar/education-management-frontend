@@ -34,6 +34,7 @@ import TeacherTestListing from "./pages/teacher/TeacherTestListing";
 import StudentTestListing from "./pages/student/StudentTestListing";
 import StudentTestResults from "./pages/teacher/StudentTestResults";
 import { useSelector } from "react-redux";
+import FileUpload from "./pages/teacher/FileUpload";
 
 function App() {
   const theme = useMemo(() => createTheme(themeSettings()), []);
@@ -72,6 +73,7 @@ function App() {
           <Route path="/mark/:id" element={<StudentSheet />} />
           <Route path="/teacher-tests" element={<TeacherTestListing />} />
           <Route path="/result/:id" element={<StudentTestResults />} />
+          <Route path="/files" element={<FileUpload />} />
 
           {/* STUDENT */}
           <Route path="/mark-list" element={<StudentMarksheet />} />
