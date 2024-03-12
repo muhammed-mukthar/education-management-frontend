@@ -66,6 +66,32 @@ function UserList() {
       toast.error(errorMessage);
     }
   };
+  const handleReject = async (userId) => {
+    let jwtToken = localStorage.getItem("accessToken");
+
+    try {
+      await axios.post(
+        `http://localhost:8080/api/v1/auth/reject/${userId}`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+      fetchData();
+      toast.success("User Rejected Successfully");
+    } catch (err) {
+      console.log("Error:", err); // Log the entire error object for debugging
+      let errorMessage = "An error occurred";
+      if (err.response && err.response.data && err.response.data.message) {
+        errorMessage = err.response.data.message;
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      toast.error(errorMessage);
+    }
+  };
 
   return (
     <Box
@@ -123,14 +149,25 @@ function UserList() {
                   <TableCell>
                     {user.verify ? (
                       "Accepted"
+                    ) : user.isRejected ? (
+                      "Rejected"
                     ) : (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => handleAccept(user._id)}
-                      >
-                        Accept
-                      </Button>
+                      <>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => handleAccept(user._id)}
+                        >
+                          Accept
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="error"
+                          onClick={() => handleReject(user._id)}
+                        >
+                          Reject
+                        </Button>
+                      </>
                     )}
                   </TableCell>{" "}
                 </TableRow>
