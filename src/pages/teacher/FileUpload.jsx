@@ -23,12 +23,14 @@ import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteModal from "./DeleteModal";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function FileUpload() {
   const [files, setFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [deleteFileId, setDeleteFileId] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const userData = useSelector((state) => state.userId.userData);
 
   const isNotMobile = useMediaQuery("(min-width: 1000px)");
   const theme = useTheme();
@@ -231,6 +233,7 @@ function FileUpload() {
               <Button
                 variant="contained"
                 component="span"
+                className="m-3 w-100"
                 startIcon={<CloudUploadIcon />}
               >
                 Upload
@@ -254,46 +257,52 @@ function FileUpload() {
         </Grid>
         <Grid item xs={12}>
           <List>
-            {files.map((file) => (
-              <Paper key={file._id} elevation={3}>
-                <ListItem>
-                  <ListItemIcon>
-                    {file.path.endsWith(".jpg") ||
-                    file.path.endsWith(".png") ? (
-                      <ImageIcon />
-                    ) : file.path.endsWith(".mp4") ? (
-                      <VideoLibraryIcon />
-                    ) : (
-                      <InsertDriveFileIcon />
-                    )}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      file.filename.length > 20
-                        ? file.filename.substring(0, 20) + "..."
-                        : file.filename
-                    }
-                  />
-                  <ListItemText primary={file.teacher} />
-                  <ListItemText primary={formatDate(file.createdAt)} />
-                  <Box ml={1}>
-                    <IconButton
-                      onClick={() =>
-                        handleFileDownload(file._id, file.filename)
+            {files
+              .filter(
+                (user) =>
+                  userData.role === "branch" || user.user === userData._id
+              )
+              .map((file) => (
+                <Paper key={file._id} elevation={3}>
+                  <ListItem>
+                    <ListItemIcon>
+                      {file.path.endsWith(".jpg") ||
+                      file.path.endsWith(".png") ? (
+                        <ImageIcon />
+                      ) : file.path.endsWith(".mp4") ? (
+                        <VideoLibraryIcon />
+                      ) : (
+                        <InsertDriveFileIcon />
+                      )}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={
+                        file.filename.length > 20
+                          ? file.filename.substring(0, 20) + "..."
+                          : file.filename
                       }
-                    >
-                      <CloudDownloadIcon />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => openDeleteModal(file._id)}
-                      color="error"
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Box>
-                </ListItem>
-              </Paper>
-            ))}
+                    />
+                    <ListItemText primary={file?.teacher} />
+
+                    <ListItemText primary={formatDate(file.createdAt)} />
+                    <Box ml={1}>
+                      <IconButton
+                        onClick={() =>
+                          handleFileDownload(file._id, file.filename)
+                        }
+                      >
+                        <CloudDownloadIcon />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => openDeleteModal(file._id)}
+                        color="error"
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Box>
+                  </ListItem>
+                </Paper>
+              ))}
           </List>
         </Grid>
       </Grid>{" "}

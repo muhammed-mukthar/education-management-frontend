@@ -30,6 +30,7 @@ import {
 } from "@mui/material";
 import { saveAs } from "file-saver"; // Import saveAs function from file-saver library
 import * as XLSX from "xlsx"; // Import XLSX library for Excel export
+import { useSelector } from "react-redux";
 
 const StudentSheet = () => {
   const { id } = useParams();
@@ -37,6 +38,7 @@ const StudentSheet = () => {
   const navigate = useNavigate();
   const isNotMobile = useMediaQuery("(min-width: 1000px)");
   const loggedIn = JSON.parse(localStorage.getItem("authToken"));
+  const userData = useSelector((state) => state.userId.userData);
 
   const [response, setResponse] = useState(false);
   const [error, setError] = useState("");
@@ -313,49 +315,55 @@ const StudentSheet = () => {
                 Back
               </span>
             </Button>
-            <Button
-              variant="contained"
-              onClick={handleOpenCreateModal}
-              sx={{
-                backgroundColor: theme.palette.primary.main,
-                color: theme.palette.primary.contrastText,
-                "&:hover": {
-                  backgroundColor: theme.palette.primary.dark,
-                },
-                marginRight: "1rem",
-              }}
-            >
-              Create Mark
-            </Button>
-            {/* Add export to Excel button */}
-            <Button
-              variant="contained"
-              onClick={handleExportToExcel}
-              sx={{
-                backgroundColor: theme.palette.primary.main,
-                color: theme.palette.primary.contrastText,
-                "&:hover": {
-                  backgroundColor: theme.palette.primary.dark,
-                },
-                marginRight: "1rem",
-              }}
-            >
-              Export to Excel
-            </Button>
+            {userData.role == "branch" ? (
+              <>
+                <Button
+                  variant="contained"
+                  onClick={handleOpenCreateModal}
+                  sx={{
+                    backgroundColor: theme.palette.primary.main,
+                    color: theme.palette.primary.contrastText,
+                    "&:hover": {
+                      backgroundColor: theme.palette.primary.dark,
+                    },
+                    marginRight: "1rem",
+                  }}
+                >
+                  Create Mark
+                </Button>
+                {/* Add export to Excel button */}
+                <Button
+                  variant="contained"
+                  onClick={handleExportToExcel}
+                  sx={{
+                    backgroundColor: theme.palette.primary.main,
+                    color: theme.palette.primary.contrastText,
+                    "&:hover": {
+                      backgroundColor: theme.palette.primary.dark,
+                    },
+                    marginRight: "1rem",
+                  }}
+                >
+                  Export to Excel
+                </Button>
 
-            <Button
-              variant="contained"
-              onClick={handleSendNotification}
-              sx={{
-                backgroundColor: theme.palette.primary.main,
-                color: theme.palette.primary.contrastText,
-                "&:hover": {
-                  backgroundColor: theme.palette.primary.dark,
-                },
-              }}
-            >
-              Send Notification To Parent
-            </Button>
+                <Button
+                  variant="contained"
+                  onClick={handleSendNotification}
+                  sx={{
+                    backgroundColor: theme.palette.primary.main,
+                    color: theme.palette.primary.contrastText,
+                    "&:hover": {
+                      backgroundColor: theme.palette.primary.dark,
+                    },
+                  }}
+                >
+                  Send Notification To Parent
+                </Button>
+              </>
+            ) : (
+              ""
+            )}
           </Box>
           <Collapse in={error !== ""}>
             <Alert severity="error" sx={{ mb: 2 }}>
@@ -370,42 +378,56 @@ const StudentSheet = () => {
                   <TableCell>Marks</TableCell>
                   <TableCell>Total</TableCell>
                   <TableCell>Edit</TableCell>
-                  <TableCell>Delete</TableCell>
+                  {userData.role == "branch" ? (
+                    <TableCell>Delete</TableCell>
+                  ) : (
+                    ""
+                  )}
                 </TableRow>
               </TableHead>
               <TableBody>
                 {questions.length &&
-                  questions.map((user) => (
-                    <TableRow key={user._id}>
-                      <TableCell>{user?.subject}</TableCell>
-                      <TableCell>{user?.mark}</TableCell>
-                      <TableCell>100</TableCell>
-                      <TableCell>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() =>
-                            handleOpenEditModal(
-                              user.subject,
-                              user.mark,
-                              user._id
-                            )
-                          }
-                        >
-                          Edit
-                        </Button>
-                      </TableCell>{" "}
-                      <TableCell>
-                        <Button
-                          variant="contained"
-                          color="error"
-                          onClick={() => handleOpenDeleteModal(user._id)}
-                        >
-                          Delete
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  questions
+                    .filter(
+                      (user) =>
+                        userData.role === "branch" ||
+                        user.subject === userData.subject
+                    )
+                    .map((user) => (
+                      <TableRow key={user._id}>
+                        <TableCell>{user?.subject}</TableCell>
+                        <TableCell>{user?.mark}</TableCell>
+                        <TableCell>100</TableCell>
+                        <TableCell>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() =>
+                              handleOpenEditModal(
+                                user.subject,
+                                user.mark,
+                                user._id
+                              )
+                            }
+                          >
+                            Edit
+                          </Button>
+                        </TableCell>{" "}
+                        {userData.role == "branch" ? (
+                          <TableCell>
+                            <Button
+                              variant="contained"
+                              color="error"
+                              onClick={() => handleOpenDeleteModal(user._id)}
+                            >
+                              Delete
+                            </Button>
+                          </TableCell>
+                        ) : (
+                          ""
+                        )}
+                      </TableRow>
+                    ))}
               </TableBody>
             </Table>
           </TableContainer>
