@@ -30,6 +30,7 @@ import {
 } from "@mui/material";
 import { saveAs } from "file-saver"; // Import saveAs function from file-saver library
 import * as XLSX from "xlsx"; // Import XLSX library for Excel export
+import { useSelector } from "react-redux";
 
 const TeacherTestListing = () => {
   const { id } = useParams();
@@ -37,6 +38,7 @@ const TeacherTestListing = () => {
   const navigate = useNavigate();
   const isNotMobile = useMediaQuery("(min-width: 1000px)");
   const loggedIn = JSON.parse(localStorage.getItem("authToken"));
+  const userData = useSelector((state) => state.userId.userData);
 
   const [response, setResponse] = useState(false);
   const [error, setError] = useState("");
@@ -210,7 +212,10 @@ const TeacherTestListing = () => {
 
   // Function to export table data to Excel
   const handleExportToExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(questions);
+    let filteredQuestions = questions.filter(
+      (user) => userData.role === "branch" || user.teacherId === userData._id
+    );
+    const worksheet = XLSX.utils.json_to_sheet(filteredQuestions);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Marks");
     const excelBuffer = XLSX.write(workbook, {
@@ -339,41 +344,54 @@ const TeacherTestListing = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {questions.length &&
-                  questions.map((user) => (
-                    <TableRow key={user._id}>
-                      <TableCell>{user?.name}</TableCell>
-                      <TableCell>{user?.course}</TableCell>
-                      <TableCell>{user?.teacher}</TableCell>
-                      <TableCell>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() => handleViewQuestion(user._id)}
-                        >
-                          View
-                        </Button>
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="contained"
-                          color="success"
-                          onClick={() => handleViewResult(user._id)}
-                        >
-                          View Result
-                        </Button>
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="contained"
-                          color="error"
-                          onClick={() => handleOpenDeleteModal(user._id)}
-                        >
-                          Delete
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                {questions.length ? (
+                  questions
+                    .filter(
+                      (user) =>
+                        userData.role === "branch" ||
+                        user.teacherId === userData._id
+                    )
+                    .map((user) => (
+                      <TableRow key={user._id}>
+                        <TableCell>{user?.name}</TableCell>
+                        <TableCell>{user?.course}</TableCell>
+                        <TableCell>{user?.teacher}</TableCell>
+                        <TableCell>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => handleViewQuestion(user._id)}
+                          >
+                            View
+                          </Button>
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            variant="contained"
+                            color="success"
+                            onClick={() => handleViewResult(user._id)}
+                          >
+                            View Result
+                          </Button>
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            variant="contained"
+                            color="error"
+                            onClick={() => handleOpenDeleteModal(user._id)}
+                          >
+                            Delete
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={6} align="center">
+                      No Data found.
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>

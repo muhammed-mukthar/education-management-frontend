@@ -157,13 +157,20 @@ const StudentTestResults = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {questions.length &&
+                {questions.length ? (
                   questions.map((user) => (
                     <TableRow key={user._id}>
                       <TableCell>{user?.student}</TableCell>
                       <TableCell>{user?.marks}</TableCell>
                     </TableRow>
-                  ))}
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={6} align="center">
+                      No Data found.
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>

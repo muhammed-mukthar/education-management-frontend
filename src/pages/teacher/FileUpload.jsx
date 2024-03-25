@@ -282,7 +282,7 @@ function FileUpload() {
                           : file.filename
                       }
                     />
-                    <ListItemText primary={file?.teacher} />
+                    <ListItemText primary={file?.subject} />
 
                     <ListItemText primary={formatDate(file.createdAt)} />
                     <Box ml={1}>

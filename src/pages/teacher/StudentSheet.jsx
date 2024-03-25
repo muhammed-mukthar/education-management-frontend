@@ -43,7 +43,7 @@ const StudentSheet = () => {
   const [response, setResponse] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [questions, setQuestions] = useState(false);
+  const [questions, setQuestions] = useState([]);
 
   // Create mark modal state
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -60,6 +60,7 @@ const StudentSheet = () => {
   const [editFormError, setEditFormError] = useState("");
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [deleteMarkId, setDeleteMarkId] = useState("");
+  const [total, setTotal] = useState(0);
 
   const handleOpenDeleteModal = (markId) => {
     setDeleteMarkId(markId);
@@ -110,6 +111,18 @@ const StudentSheet = () => {
 
         setLoading(false);
         setQuestions(data);
+
+        let totalData =
+          data &&
+          data.length > 0 &&
+          data
+            ?.filter(
+              (user) =>
+                userData.role === "branch" || user.subject === userData.subject
+            )
+            .reduce((total, user) => total + user.mark, 0);
+
+        setTotal(totalData);
       } catch (err) {
         console.error(err);
         setLoading(false);
@@ -118,7 +131,7 @@ const StudentSheet = () => {
     };
 
     fetchData();
-  }, [response, id]);
+  }, [response, id, editMarks]);
 
   const handleOpenCreateModal = () => {
     setOpenCreateModal(true);
@@ -184,7 +197,6 @@ const StudentSheet = () => {
     event.preventDefault();
     try {
       let jwtToken = localStorage.getItem("accessToken");
-
       const { data } = await axios.put(
         `http://localhost:8080/api/v1/auth/marks/edit`,
         {
@@ -428,6 +440,26 @@ const StudentSheet = () => {
                         )}
                       </TableRow>
                     ))}
+                {userData.role == "branch" ? (
+                  <TableRow>
+                    <TableCell>Total</TableCell>
+                    <TableCell>{total}</TableCell>{" "}
+                    <TableCell>
+                      {" "}
+                      {questions &&
+                        questions.length > 0 &&
+                        questions
+                          .filter(
+                            (user) =>
+                              userData.role === "branch" ||
+                              user.subject === userData.subject
+                          )
+                          .reduce((total, user) => total + user.total, 0)}
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  ""
+                )}
               </TableBody>
             </Table>
           </TableContainer>
