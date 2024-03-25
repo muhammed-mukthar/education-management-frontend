@@ -37,6 +37,8 @@ import { useSelector } from "react-redux";
 import FileUpload from "./pages/teacher/FileUpload";
 import { Toaster } from "react-hot-toast";
 import FileListing from "./pages/student/FileListing";
+import StudentList from "./pages/dashboard/StudentList";
+import TeacherList from "./pages/dashboard/TeacherList";
 
 function App() {
   const theme = useMemo(() => createTheme(themeSettings()), []);
@@ -80,6 +82,9 @@ function App() {
           <Route path="/dashboard" element={<Homepage />} />
           <Route path="/history" element={<History />} />
           <Route path="/users" element={<UserList />} />
+          <Route path="/student" element={<StudentList />} />
+          <Route path="/teacher" element={<TeacherList />} />
+
           <Route path="/quiz/:id" element={<Cybequiz />} />
           <Route path="/add-quiz/:id" element={<AddQuizOptions />} />
           {/* teacher */}
