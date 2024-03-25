@@ -28,6 +28,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
+  const [subject, setSubject] = useState("");
   const [selectedClass, setSelectedClass] = useState("");
   const [parentsEmail, setParentsEmail] = useState(""); // New state for parent's email
   const [error, setError] = useState("");
@@ -48,6 +49,7 @@ const Register = () => {
         password,
         role,
         course: selectedClass,
+        subject,
         parentsEmail: role === "student" ? parentsEmail : undefined, // Only send parentsEmail if role is "student"
       });
       setLoading(false);
@@ -129,10 +131,27 @@ const Register = () => {
             value={selectedClass}
             onChange={(e) => setSelectedClass(e.target.value)}
           >
-            <MenuItem value="bca">BCA</MenuItem>
-            <MenuItem value="bcom">BCOM</MenuItem>
+            <MenuItem value="sslc">10 th / sslc</MenuItem>
           </Select>
         </FormControl>
+        {role === "teacher" && ( // Render parents email field only if role is "student"
+          <FormControl fullWidth required margin="normal">
+            <InputLabel>Subject</InputLabel>
+            <Select
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+            >
+              <MenuItem value="">Select Subject</MenuItem>
+              <MenuItem value="physics">Physics</MenuItem>
+              <MenuItem value="chemistry">Chemistry</MenuItem>
+              <MenuItem value="biology">Biology</MenuItem>
+              <MenuItem value="english">English</MenuItem>
+              <MenuItem value="malayalam">Malayalam</MenuItem>
+              <MenuItem value="social_science">Social Science</MenuItem>
+              <MenuItem value="maths">Math</MenuItem>
+            </Select>
+          </FormControl>
+        )}
         {role === "student" && ( // Render parents email field only if role is "student"
           <TextField
             label="Parent's Email"

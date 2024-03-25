@@ -244,7 +244,7 @@ const Homepage = () => {
             </Card>
           </Box>
         </Box>
-      ) : userData?.role == "teacher" ? (
+      ) : userData?.role == "teacher" || userData?.role == "branch" ? (
         <Box
           sx={{
             display: "flex",

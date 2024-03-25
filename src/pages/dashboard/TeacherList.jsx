@@ -119,6 +119,33 @@ function TeacherList() {
     }
   };
 
+  const handlePromote = async (userId) => {
+    let jwtToken = localStorage.getItem("accessToken");
+
+    try {
+      await axios.post(
+        `http://localhost:8080/api/v1/auth/promote/${userId}`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+      fetchData();
+      toast.success("User Promoted To Branch Manager Successfully");
+    } catch (err) {
+      console.log("Error:", err); // Log the entire error object for debugging
+      let errorMessage = "An error occurred";
+      if (err.response && err.response.data && err.response.data.message) {
+        errorMessage = err.response.data.message;
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      toast.error(errorMessage);
+    }
+  };
+
   return (
     <Box
       width={"40%"}
@@ -160,6 +187,7 @@ function TeacherList() {
               <TableCell>Email</TableCell>
               <TableCell>Role</TableCell>
               <TableCell>Class</TableCell>
+              <TableCell>Subject</TableCell>
               <TableCell>Accepted</TableCell>
               <TableCell>Action</TableCell>
             </TableRow>
@@ -173,6 +201,7 @@ function TeacherList() {
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user.role}</TableCell>
                   <TableCell>{user.course}</TableCell>
+                  <TableCell>{user.subject}</TableCell>
                   <TableCell>
                     {user.verify ? (
                       "Accepted"
@@ -184,6 +213,7 @@ function TeacherList() {
                           variant="contained"
                           color="primary"
                           onClick={() => handleAccept(user._id)}
+                          className="mb-3"
                         >
                           Accept
                         </Button>
@@ -198,13 +228,33 @@ function TeacherList() {
                     )}
                   </TableCell>{" "}
                   <TableCell>
-                    <Button
-                      variant="contained"
-                      color="error"
-                      onClick={() => handleDelete(user._id)}
-                    >
-                      Delete
-                    </Button>
+                    <>
+                      <Button
+                        variant="contained"
+                        color="error"
+                        onClick={() => handleDelete(user._id)}
+                        className="mb-3"
+                        title="Delete User"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                      >
+                        Delete
+                      </Button>
+                      {user.role != "branch" ? (
+                        <Button
+                          variant="contained"
+                          color="info"
+                          onClick={() => handlePromote(user._id)}
+                          title="Convert to branch manager"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                        >
+                          Convert
+                        </Button>
+                      ) : (
+                        ""
+                      )}
+                    </>
                   </TableCell>{" "}
                 </TableRow>
               ))}
